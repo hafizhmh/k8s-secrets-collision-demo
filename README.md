@@ -29,7 +29,7 @@ spec:
 
 Note that `secret2` is referred last. If we run
 ```shell
-echo "PASSWORD: ${PASSWORD}";
+echo "PASSWORD: ${PASSWORD}"
 ```
 from what `Secret` is the value sourced?
 
@@ -99,8 +99,8 @@ spec:
 
 So now we can refer the keys as
 ```shell
-echo "PASSWORD from secret1: ${SECRET1_PASSWORD}";
-echo "PASSWORD from secret2: ${SECRET2_PASSWORD}";
+echo "PASSWORD from secret1: ${SECRET1_PASSWORD}"
+echo "PASSWORD from secret2: ${SECRET2_PASSWORD}"
 ```
 instead of using `USERNAME` and so on, without overwriting any values.
 
@@ -149,14 +149,14 @@ and so on. You can read each secret with something like:
 
 ```shell
 echo "Reading secret1"
-cd /etc/secrets/secret1;
-echo "USERNAME: $(cat USERNAME)";
-echo "PASSWORD: $(cat PASSWORD)";
+cd /etc/secrets/secret1
+echo "USERNAME: $(cat USERNAME)"
+echo "PASSWORD: $(cat PASSWORD)"
 
 echo "Reading secret2"
-cd /etc/secrets/secret2;
-echo "USERNAME: $(cat USERNAME)";
-echo "PASSWORD: $(cat PASSWORD)";
+cd /etc/secrets/secret2
+echo "USERNAME: $(cat USERNAME)"
+echo "PASSWORD: $(cat PASSWORD)"
 ```
 
 IMO this is still analoguous to the prefix approach though, with the directory acts like
@@ -197,11 +197,11 @@ spec:
             - sh
             - -c  
             - |
-              for path in /tmp/secrets/**/*; do
-                echo "path: ${path}";
-                secretfile="$(dirname ${path} | sed -e 's/\/tmp\//\/etc\//').env";
-                echo "$(basename ${path})=$(cat ${path})" >> ${secretfile};
-              done;
+              for path in /tmp/secrets/**/* do
+                echo "path: ${path}"
+                secretfile="$(dirname ${path} | sed -e 's/\/tmp\//\/etc\//').env"
+                echo "$(basename ${path})=$(cat ${path})" >> ${secretfile}
+              done
           volumeMounts:
             - name: secret1-volume
               mountPath: /tmp/secrets/secret1
@@ -250,8 +250,8 @@ spec:
             - sh
             - -c  
             - |
-              cat /etc/secrets/secret1.env;
-              cat /etc/secrets/secret2.env;
+              cat /etc/secrets/secret1.env
+              cat /etc/secrets/secret2.env
           volumeMounts:
             - name: secret-rendered-volume
               mountPath: /etc/secrets
@@ -348,8 +348,8 @@ It is also more complex:
 
   2.  The service account must be granted read access to the required secrets.
       We should limit the allowed resource to be accessed only to the bare minimum.
-      A `Role` authorizes an antity to do some actions; a `RoleBinding` binds an entity
-      to a `Role`. A `Role` and `RoleBinding` are namespaced resources; `ClusterRole`
+      A `Role` authorizes an antity to do some actions a `RoleBinding` binds an entity
+      to a `Role`. A `Role` and `RoleBinding` are namespaced resources `ClusterRole`
       and `ClusterRoleBinding` are their cluster-wide counterpart.
 
       ```yaml
@@ -405,27 +405,27 @@ It is also more complex:
 
       ```shell
       # Point to the internal API server hostname
-      APISERVER=https://kubernetes.default.svc;
+      APISERVER=https://kubernetes.default.svc
 
       # Path to ServiceAccount token
-      SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount;
+      SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
       
       # Read this Pod's namespace
-      NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace);
+      NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
       
       # Read the ServiceAccount bearer token
-      TOKEN=$(cat ${SERVICEACCOUNT}/token);
+      TOKEN=$(cat ${SERVICEACCOUNT}/token)
       
       # Reference the internal certificate authority (CA)
-      CACERT=${SERVICEACCOUNT}/ca.crt;
+      CACERT=${SERVICEACCOUNT}/ca.crt
 
       get_secret() {
-        local secret;
-        secret=$(curl -s --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/$1/secrets/$2);
-        echo ${secret} | jq -r ".data.$3 | @base64d";
-      };
+        local secret
+        secret=$(curl -s --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/$1/secrets/$2)
+        echo ${secret} | jq -r ".data.$3 | @base64d"
+      }
 
-      echo "USERNAME from secret1: $(get_secret ${NAMESPACE} secret1 USERNAME)";
+      echo "USERNAME from secret1: $(get_secret ${NAMESPACE} secret1 USERNAME)"
       ```
 
 Now let's see the result:

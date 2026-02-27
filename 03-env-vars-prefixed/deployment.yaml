@@ -18,16 +18,16 @@ spec:
             - sh
             - -c  
             - |
-              echo "Starting";
+              echo "Starting"
               echo "----------"
 
-              echo "PASSWORD from secret1: ${SECRET1_PASSWORD}";
+              echo "PASSWORD from secret1: ${SECRET1_PASSWORD}"
               echo "----------"
 
-              echo "PASSWORD from secret2: ${SECRET2_PASSWORD}";
+              echo "PASSWORD from secret2: ${SECRET2_PASSWORD}"
               echo "----------"
 
-              sleep infinity;
+              sleep infinity
           resources:
             requests:
               memory: 50Mi

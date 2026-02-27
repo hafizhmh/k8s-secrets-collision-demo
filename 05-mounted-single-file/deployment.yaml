@@ -18,17 +18,17 @@ spec:
             - sh
             - -c  
             - |
-              echo "Starting secret templating";
+              echo "Starting secret templating"
               echo "----------"
 
               for path in /tmp/secrets/**/*; do
-                echo "path: ${path}";
+                echo "path: ${path}"
 
-                secretfile="$(dirname ${path} | sed -e 's/\/tmp\//\/etc\//').env";
-                echo "$(basename ${path})=$(cat ${path})" >> ${secretfile};
-              done;
+                secretfile="$(dirname ${path} | sed -e 's/\/tmp\//\/etc\//').env"
+                echo "$(basename ${path})=$(cat ${path})" >> ${secretfile}
+              done
 
-              echo "Secret templating finished";
+              echo "Secret templating finished"
               echo "----------"
           resources:
             requests:
@@ -51,17 +51,17 @@ spec:
             - sh
             - -c  
             - |
-              echo "Starting";
+              echo "Starting"
               echo "----------"
               
-              echo "secret1 content:";
-              cat /etc/secrets/secret1.env;
+              echo "secret1 content:"
+              cat /etc/secrets/secret1.env
               echo "----------"
 
-              echo "secret2 content:";
-              cat /etc/secrets/secret2.env;
+              echo "secret2 content:"
+              cat /etc/secrets/secret2.env
               
-              sleep infinity;
+              sleep infinity
           resources:
             requests:
               memory: 50Mi

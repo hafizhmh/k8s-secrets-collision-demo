@@ -18,13 +18,13 @@ spec:
             - sh
             - -c  
             - |
-              echo "Starting";
+              echo "Starting"
               echo "----------"
 
-              echo "PASSWORD: ${PASSWORD}";
+              echo "PASSWORD: ${PASSWORD}"
               echo "----------"
               
-              sleep infinity;
+              sleep infinity
           resources:
             requests:
               memory: 50Mi

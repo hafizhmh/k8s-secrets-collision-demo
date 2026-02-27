@@ -18,22 +18,22 @@ spec:
             - sh
             - -c  
             - |
-              echo "Starting";
+              echo "Starting"
               echo "----------"
 
               echo "Reading secret1"
-              cd /etc/secrets/secret1;
-              echo "USERNAME: $(cat USERNAME)";
-              echo "PASSWORD: $(cat PASSWORD)";
+              cd /etc/secrets/secret1
+              echo "USERNAME: $(cat USERNAME)"
+              echo "PASSWORD: $(cat PASSWORD)"
               echo "----------"
               
               echo "Reading secret2"
-              cd /etc/secrets/secret2;
-              echo "USERNAME: $(cat USERNAME)";
-              echo "PASSWORD: $(cat PASSWORD)";
+              cd /etc/secrets/secret2
+              echo "USERNAME: $(cat USERNAME)"
+              echo "PASSWORD: $(cat PASSWORD)"
               echo "----------"
 
-              sleep infinity;
+              sleep infinity
           resources:
             requests:
               memory: 50Mi
