@@ -331,9 +331,9 @@ without exporting the secrets as environment variable or mounting as files.
 
 It is also more complex:
 
-  1. The pod should be configured to use a dedicated `ServiceAccount`.
-  When not specified, the pod will use its namespace's default service account,
-  which is not the best practice.
+  1.  The pod should be configured to use a dedicated `ServiceAccount`.
+      When not specified, the pod will use its namespace's default service account,
+      which is not the best practice.
 
       ```yaml
       apiVersion: apps/v1
@@ -346,11 +346,11 @@ It is also more complex:
               - name: secret-reader
       ```
 
-  2. The service account must be granted read access to the required secrets.
-  We should limit the allowed resource to be accessed only to the bare minimum.
-  A `Role` authorizes an antity to do some actions; a `RoleBinding` binds an entity
-  to a `Role`. A `Role` and `RoleBinding` are namespaced resources; `ClusterRole` and
-  `ClusterRoleBinding` are their cluster-wide counterpart.
+  2.  The service account must be granted read access to the required secrets.
+      We should limit the allowed resource to be accessed only to the bare minimum.
+      A `Role` authorizes an antity to do some actions; a `RoleBinding` binds an entity
+      to a `Role`. A `Role` and `RoleBinding` are namespaced resources; `ClusterRole`
+      and `ClusterRoleBinding` are their cluster-wide counterpart.
 
       ```yaml
       apiVersion: rbac.authorization.k8s.io/v1
@@ -383,19 +383,18 @@ It is also more complex:
         name: 07-secret-reader   
       ```
 
-  3. `ServiceAccount` has token that can be use to authenticate to Kubernetes API,
-      subjected to the authorization specified by the above `Role` and `RoleBinding`.
-
-      By default (when `Pod`'s `spec.automountServiceAccountToken` is not set
+  3.  By default (when `Pod`'s `spec.automountServiceAccountToken` is not set
       to `false`), Kubernetes will mount the `ServiceAccount`'s namespace name, token,
       and API server certificate bundle to
       `/var/run/secrets/kubernetes.io/serviceaccount`.
   
-      The token is used to authorized the `Pod` to the API server and the certificate
-      bundle is used to allow client to trust the API server when establishing TLS
-      connection, since the API server is using a self-signed certificate (altough the
-      client is free to just ignore the insecure connection, such as when using
-      `curl -k`).
+      The token is used to authorized the `Pod` to the API server. subjected to the
+      authorization specified by the above `Role` and `RoleBinding`.
+      
+      The certificate bundle is used to allow a HTTPS client to trust the API server
+      when establishing TLS connection, since the API server is using a self-signed
+      certificate (altough the client is free to just ignore the insecure connection,
+      such as when using `curl -k`).
   
       The API path to query the `Secret` is
       `https://kubernetes.default.svc/api/v1/namespaces/<namespace-name>>/secrets/<secret-name>`
