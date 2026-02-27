@@ -172,7 +172,7 @@ kubectl logs deployment/04-secret-reader --all-containers --all-pods
 Result:
 ![](README-assets/04-logs.png)
 
-So we can prevent collisions and still retaining the original key name.
+So we can prevent collisions and still retain the original key name.
 However, maybe it is undesirable to change the implementation of reading the secret
 from reading an environment variable to reading a file from disk.
 
