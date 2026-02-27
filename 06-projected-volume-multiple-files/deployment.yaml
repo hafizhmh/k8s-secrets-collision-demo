@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 06-secret-reader
+spec:
+  selector:
+    matchLabels:
+      example: "06"
+  template:
+    metadata:
+      labels:
+        example: "06"
+    spec:
+      containers:
+        - name: secret-reader
+          image: alpine
+          command:
+            - sh
+            - -c  
+            - |
+              echo "Starting";
+              echo "----------"
+
+              echo "Reading secret1"
+              cd /etc/secrets/secret1;
+              echo "USERNAME: $(cat USERNAME)";
+              echo "PASSWORD: $(cat PASSWORD)";
+              echo "----------"
+              
+              echo "Reading secret2"
+              cd /etc/secrets/secret2;
+              echo "USERNAME: $(cat USERNAME)";
+              echo "PASSWORD: $(cat PASSWORD)";
+              echo "----------"
+
+              sleep infinity;
+          resources:
+            requests:
+              memory: 50Mi
+              cpu: 50m
+            limits:
+              memory: 50Mi
+              cpu: 50m
+          volumeMounts:
+            - name: secrets-volume
+              readOnly: true
+              mountPath: "/etc/secrets"
+      volumes:
+        - name: secrets-volume
+          projected:
+            sources:
+              - secret:
+                  name: secret1
+                  items:
+                    - key: USERNAME
+                      path: secret1/USERNAME
+                    - key: PASSWORD
+                      path: secret1/PASSWORD
+              - secret:
+                  name: secret2
+                  items:
+                    - key: USERNAME
+                      path: secret2/USERNAME
+                    - key: PASSWORD
+                      path: secret2/PASSWORD

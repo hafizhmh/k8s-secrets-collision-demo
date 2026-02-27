@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 05-secret-reader
+spec:
+  selector:
+    matchLabels:
+      example: "05"
+  template:
+    metadata:
+      labels:
+        example: "05"
+    spec:
+      initContainers:
+        - name: renderer
+          image: alpine
+          command:
+            - sh
+            - -c  
+            - |
+              echo "Starting secret templating";
+              echo "----------"
+
+              for path in /tmp/secrets/**/*; do
+                echo "path: ${path}";
+
+                secretfile="$(dirname ${path} | sed -e 's/\/tmp\//\/etc\//').env";
+                echo "$(basename ${path})=$(cat ${path})" >> ${secretfile};
+              done;
+
+              echo "Secret templating finished";
+              echo "----------"
+          resources:
+            requests:
+              memory: 50Mi
+              cpu: 50m
+            limits:
+              memory: 50Mi
+              cpu: 50m
+          volumeMounts:
+            - name: secret1-volume
+              mountPath: /tmp/secrets/secret1
+            - name: secret2-volume
+              mountPath: /tmp/secrets/secret2
+            - name: secret-rendered-volume
+              mountPath: /etc/secrets
+      containers:
+        - name: secret-reader
+          image: alpine
+          command:
+            - sh
+            - -c  
+            - |
+              echo "Starting";
+              echo "----------"
+              
+              echo "secret1 content:";
+              cat /etc/secrets/secret1.env;
+              echo "----------"
+
+              echo "secret2 content:";
+              cat /etc/secrets/secret2.env;
+              
+              sleep infinity;
+          resources:
+            requests:
+              memory: 50Mi
+              cpu: 50m
+            limits:
+              memory: 50Mi
+              cpu: 50m
+          volumeMounts:
+            - name: secret-rendered-volume
+              mountPath: /etc/secrets
+              readOnly: true
+      volumes:
+        - name: secret1-volume
+          secret:
+            secretName: secret1
+        - name: secret2-volume
+          secret:
+            secretName: secret2
+        - name: secret-rendered-volume
+          emptyDir: {}

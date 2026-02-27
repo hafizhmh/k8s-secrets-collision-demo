@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 04-secret-reader
+spec:
+  selector:
+    matchLabels:
+      example: "04"
+  template:
+    metadata:
+      labels:
+        example: "04"
+    spec:
+      containers:
+        - name: secret-reader
+          image: alpine
+          command:
+            - sh
+            - -c  
+            - |
+              echo "Starting";
+              echo "----------"
+
+              echo "Reading secret1"
+              cd /etc/secrets/secret1;
+              echo "USERNAME: $(cat USERNAME)";
+              echo "PASSWORD: $(cat PASSWORD)";
+              echo "----------"
+              
+              echo "Reading secret2"
+              cd /etc/secrets/secret2;
+              echo "USERNAME: $(cat USERNAME)";
+              echo "PASSWORD: $(cat PASSWORD)";
+              echo "----------"
+              
+              sleep infinity;
+          resources:
+            requests:
+              memory: 50Mi
+              cpu: 50m
+            limits:
+              memory: 50Mi
+              cpu: 50m
+          volumeMounts:
+            - name: secret1-volume
+              readOnly: true
+              mountPath: /etc/secrets/secret1
+            - name: secret2-volume
+              readOnly: true
+              mountPath: /etc/secrets/secret2
+      volumes:
+        - name: secret1-volume
+          secret:
+            secretName: secret1
+        - name: secret2-volume
+          secret:
+            secretName: secret2

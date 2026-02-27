@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 07-secret-reader
+spec:
+  selector:
+    matchLabels:
+      example: "07"
+  template:
+    metadata:
+      labels:
+        example: "07"
+    spec:
+      serviceAccountName: 07-secret-reader
+      containers:
+        - name: secret-reader
+          image: alpine
+          command:
+            - sh
+            - -c  
+            - |
+              echo "Starting";
+              echo "----------"
+
+              echo "Installing tools"
+              apk update && apk add curl jq;
+              echo "----------"
+
+              `# Point to the internal API server hostname`
+              APISERVER=https://kubernetes.default.svc;
+
+              `# Path to ServiceAccount token`
+              SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount;
+              
+              `# Read this Pod's namespace`
+              NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace);
+              
+              `# Read the ServiceAccount bearer token`
+              TOKEN=$(cat ${SERVICEACCOUNT}/token);
+              
+              `# Reference the internal certificate authority (CA)`
+              CACERT=${SERVICEACCOUNT}/ca.crt;
+
+              get_secret() {
+                local secret;
+                secret=$(curl -s --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/$1/secrets/$2);
+                echo ${secret} | jq -r ".data.$3 | @base64d"
+              };
+
+              echo "USERNAME from secret1: $(get_secret ${NAMESPACE} secret1 USERNAME)";
+              echo "PASSWORD from secret1: $(get_secret ${NAMESPACE} secret1 PASSWORD)";
+              echo "----------"
+
+              echo "USERNAME from secret2: $(get_secret ${NAMESPACE} secret2 USERNAME)";
+              echo "PASSWORD from secret2: $(get_secret ${NAMESPACE} secret2 USERNAME)";
+              echo "----------"
+              
+              sleep infinity;
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 500m
+            limits:
+              memory: 256Mi
+              cpu: 500m

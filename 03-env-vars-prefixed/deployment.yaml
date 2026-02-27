@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 03-secret-reader
+spec:
+  selector:
+    matchLabels:
+      example: "03"
+  template:
+    metadata:
+      labels:
+        example: "03"
+    spec:
+      containers:
+        - name: secret-reader
+          image: alpine
+          command:
+            - sh
+            - -c  
+            - |
+              echo "Starting";
+              echo "----------"
+
+              echo "PASSWORD from secret1: ${SECRET1_PASSWORD}";
+              echo "----------"
+
+              echo "PASSWORD from secret2: ${SECRET2_PASSWORD}";
+              echo "----------"
+
+              sleep infinity;
+          resources:
+            requests:
+              memory: 50Mi
+              cpu: 50m
+            limits:
+              memory: 50Mi
+              cpu: 50m
+          envFrom:
+            - secretRef:
+                name: secret1
+              prefix: SECRET1_
+            - secretRef:
+                name: secret2 
+              prefix: SECRET2_
