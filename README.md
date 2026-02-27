@@ -160,7 +160,7 @@ echo "PASSWORD: $(cat PASSWORD)";
 ```
 
 IMO this is still analoguous to the prefix approach though, with the directory acts like
-a prefix to the file name. Interestingly, object storages do use prefix to emulate directory.
+a prefix to the file name. Interestingly, object storages do use prefix to simulate directory.
 
 Now let's see the result:
 
