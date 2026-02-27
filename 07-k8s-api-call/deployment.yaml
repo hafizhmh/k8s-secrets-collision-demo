@@ -20,11 +20,11 @@ spec:
             - -c  
             - |
               echo "Starting";
-              echo "----------"
+              echo "----------";
 
-              echo "Installing tools"
+              echo "Installing tools";
               apk update && apk add curl jq;
-              echo "----------"
+              echo "----------";
 
               `# Point to the internal API server hostname`
               APISERVER=https://kubernetes.default.svc;
@@ -44,16 +44,16 @@ spec:
               get_secret() {
                 local secret;
                 secret=$(curl -s --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/$1/secrets/$2);
-                echo ${secret} | jq -r ".data.$3 | @base64d"
+                echo ${secret} | jq -r ".data.$3 | @base64d";
               };
 
               echo "USERNAME from secret1: $(get_secret ${NAMESPACE} secret1 USERNAME)";
               echo "PASSWORD from secret1: $(get_secret ${NAMESPACE} secret1 PASSWORD)";
-              echo "----------"
+              echo "----------";
 
               echo "USERNAME from secret2: $(get_secret ${NAMESPACE} secret2 USERNAME)";
               echo "PASSWORD from secret2: $(get_secret ${NAMESPACE} secret2 USERNAME)";
-              echo "----------"
+              echo "----------";
               
               sleep infinity;
           resources:

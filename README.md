@@ -422,7 +422,7 @@ It is also more complex:
       get_secret() {
         local secret;
         secret=$(curl -s --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/$1/secrets/$2);
-        echo ${secret} | jq -r ".data.$3 | @base64d"
+        echo ${secret} | jq -r ".data.$3 | @base64d";
       };
 
       echo "USERNAME from secret1: $(get_secret ${NAMESPACE} secret1 USERNAME)";
