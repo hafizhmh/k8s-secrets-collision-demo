@@ -220,7 +220,7 @@ spec:
           emptyDir: {}
 ```
 
-Beside the two `Secrets` as volumes, will use additional volume to write the rendered
+Beside the two `Secrets` as volumes, we will use additional volume to write the rendered
 secret. Note that a volume from a `Secret` is read-only, so we can not use it to write
 files.
 
