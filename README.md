@@ -388,7 +388,7 @@ It is also more complex:
       and API server certificate bundle to
       `/var/run/secrets/kubernetes.io/serviceaccount`.
   
-      The token is used to authorized the `Pod` to the API server. subjected to the
+      The token is used to authorized the `Pod` to the API server, subjected to the
       authorization specified by the above `Role` and `RoleBinding`.
       
       The certificate bundle is used to allow a HTTPS client to trust the API server
