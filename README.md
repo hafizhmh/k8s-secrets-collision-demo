@@ -102,7 +102,7 @@ So now we can refer the keys as
 echo "PASSWORD from secret1: ${SECRET1_PASSWORD}"
 echo "PASSWORD from secret2: ${SECRET2_PASSWORD}"
 ```
-instead of using `USERNAME` and so on, without overwriting any values.
+instead of using `PASSWORD` and so on, without overwriting any values.
 
 ```shell
 kubectl apply -k 03-env-vars-prefixed
