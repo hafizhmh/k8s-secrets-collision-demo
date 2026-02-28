@@ -180,7 +180,7 @@ from reading an environment variable to reading a file from disk.
 
 Note that in the previous example each key is mounted as a single file.
 Maybe you prefer if they are formatted into a single file, like the commonly-used
-dontenv files.
+dotenv files.
 
 We can use an `initContainer` to render each `Secret` into a dotenv file.
 
