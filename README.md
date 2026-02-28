@@ -271,7 +271,7 @@ kubectl logs deployment/05-secret-reader --all-containers --all-pods
 Result:
 ![](README-assets/05-logs.png)
 
-Now we don't fewer file to be read than before. The app must be able to parse the file,
+Now we have fewer file to be read than before. The app must be able to parse the file,
 though.
 
 ## 6. Using projected volume
