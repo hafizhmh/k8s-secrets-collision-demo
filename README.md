@@ -348,7 +348,7 @@ It is also more complex:
 
   2.  The service account must be granted read access to the required secrets.
       We should limit the allowed resource to be accessed only to the bare minimum.
-      A `Role` authorizes an antity to do some actions a `RoleBinding` binds an entity
+      A `Role` authorizes an entity to do some actions a `RoleBinding` binds an entity
       to a `Role`. A `Role` and `RoleBinding` are namespaced resources `ClusterRole`
       and `ClusterRoleBinding` are their cluster-wide counterpart.
 
